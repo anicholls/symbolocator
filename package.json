@@ -11,7 +11,8 @@
   },
   "dependencies": {
     "react": "^16.2.0",
-    "react-dom": "^16.2.0"
+    "react-dom": "^16.2.0",
+    "sketch2json": "^0.1.1"
   },
   "homepage": "./",
   "main": "src/electron-starter.js",

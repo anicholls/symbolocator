@@ -45,21 +45,26 @@ class App extends Component {
     }, this.locateSymbol)
   }
 
+  addMatch(file) {
+    const matchedFiles = this.state.matchedFiles
+    matchedFiles[file.path] = file
+
+    this.setState({
+      located: true,
+      matchedFiles: matchedFiles
+    })
+  }
+
   locateSymbol() {
     const matchedFiles = {}
 
     Object.keys(this.state.sketchFiles).forEach(path => {
       const file = this.state.sketchFiles[path]
-      const detected = true //detectSymbol(SKETCH_FILE, 'My Symbol')
+      const detected = detectSymbol(file, this.state.symbolName, this.addMatch.bind(this))
 
       if (detected) {
         matchedFiles[path] = file
       }
-    })
-
-    this.setState({
-      located: true,
-      matchedFiles: matchedFiles
     })
   }
 
@@ -83,7 +88,7 @@ class App extends Component {
       )
     }
 
-    if (!this.state.located && this.state.symbolName) {
+    if (!this.state.located && this.state.symbolName && !Object.keys(this.state.sketchFiles).length) {
       stepTwo = (
         <StepTwo onFileChange={this.onFileChange.bind(this)} />
       )
@@ -101,7 +106,7 @@ class App extends Component {
       )
     }
 
-    if (this.state.located) {
+    if (Object.keys(this.state.sketchFiles).length) {
       restartButton = (
         <RestartButton onClick={this.restart.bind(this)} />
       )
