@@ -1,14 +1,26 @@
 import React, { Component } from 'react';
+import FileList from './FileList'
+import RestartButton from './RestartButton'
+import StepOne from './StepOne'
+import StepTwo from './StepTwo'
+import detectSymbol from './detectSymbol'
 import logo from './logo.svg';
 import './App.css';
+
+const SKETCH_FILE = '../test/test.sketch';
+
+const INITIAL_STATE = {
+  symbolName: '',
+  located: false,
+  sketchFiles: {},
+  matchedFiles: {}
+}
 
 class App extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      sketchFiles: {}
-    }
+    this.state = INITIAL_STATE
   }
 
   onFileChange(e) {
@@ -24,29 +36,89 @@ class App extends Component {
       }
     }, this)
 
-    this.setState({ sketchFiles: sketchFiles })
+    // Get symbol name from text input ref and set below
+
+    this.setState({
+      located: false,
+      sketchFiles: sketchFiles,
+      matchedFiles: {}
+    }, this.locateSymbol)
+  }
+
+  locateSymbol() {
+    const matchedFiles = {}
+
+    Object.keys(this.state.sketchFiles).forEach(path => {
+      const file = this.state.sketchFiles[path]
+      const detected = true //detectSymbol(SKETCH_FILE, 'My Symbol')
+
+      if (detected) {
+        matchedFiles[path] = file
+      }
+    })
+
+    this.setState({
+      located: true,
+      matchedFiles: matchedFiles
+    })
+  }
+
+  onStepOneSubmit(e) {
+    const input = e.target.elements[0]
+
+    this.setState({ symbolName: input.value })
+  }
+
+  restart() {
+    this.setState(INITIAL_STATE)
   }
 
   render() {
+    var stepOne, stepTwo, sketchFiles, matchedFiles, restartButton;
+
+
+    if (!this.state.located && !this.state.symbolName) {
+      stepOne = (
+        <StepOne onSubmit={this.onStepOneSubmit.bind(this)} />
+      )
+    }
+
+    if (!this.state.located && this.state.symbolName) {
+      stepTwo = (
+        <StepTwo onFileChange={this.onFileChange.bind(this)} />
+      )
+    }
+
+    if (Object.keys(this.state.sketchFiles).length) {
+      sketchFiles = (
+        <FileList files={this.state.sketchFiles} header="Sketch Files" />
+      )
+    }
+
+    if (this.state.located && Object.keys(this.state.matchedFiles).length) {
+      matchedFiles = (
+        <FileList files={this.state.matchedFiles} header="Matched Files" />
+      )
+    }
+
+    if (this.state.located) {
+      restartButton = (
+        <RestartButton onClick={this.restart.bind(this)} />
+      )
+    }
+
+
     return (
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
+          <h1 className="App-title">Symbolocator</h1>
         </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-        <input type="file" onChange={this.onFileChange.bind(this)} webkitdirectory="true" directory="true" multiple="true" />
-        <ul>
-          { Object.keys(this.state.sketchFiles).map((path, index) => {
-              const file = this.state.sketchFiles[path]
-
-              return (
-                <li key={index}>{ file.webkitRelativePath }</li>
-              )
-          })}
-        </ul>
+        { stepOne }
+        { stepTwo }
+        { restartButton }
+        { sketchFiles }
+        { matchedFiles }
       </div>
     );
   }

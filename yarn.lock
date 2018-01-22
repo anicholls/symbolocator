@@ -14,7 +14,7 @@
   version "2.1.1"
   resolved "https://artifactory.workday.com/artifactory/api/npm/npm-virtual/7zip-bin-win/-/7zip-bin-win-2.1.1.tgz#8acfc28bb34e53a9476b46ae85a97418e6035c20"
 
-"7zip-bin@^2.2.7", "7zip-bin@^2.3.4":
+"7zip-bin@^2.3.4", "7zip-bin@^2.4.1":
   version "2.4.1"
   resolved "https://artifactory.workday.com/artifactory/api/npm/npm-virtual/7zip-bin/-/7zip-bin-2.4.1.tgz#88cf99736d35b104dab1d430c4edd1d51e58aade"
   optionalDependencies:
@@ -1246,16 +1246,7 @@ builder-util-runtime@4.0.2:
     fs-extra-p "^4.5.0"
     sax "^1.2.4"
 
-builder-util-runtime@^3.2.0:
-  version "3.5.0"
-  resolved "https://artifactory.workday.com/artifactory/api/npm/npm-virtual/builder-util-runtime/-/builder-util-runtime-3.5.0.tgz#c78f3c6c06aacf53a544d8c6c0728f69bc176c19"
-  dependencies:
-    bluebird-lst "^1.0.5"
-    debug "^3.1.0"
-    fs-extra-p "^4.5.0"
-    sax "^1.2.4"
-
-builder-util-runtime@^4.0.2:
+builder-util-runtime@^4.0.2, builder-util-runtime@^4.0.3:
   version "4.0.3"
   resolved "https://artifactory.workday.com/artifactory/api/npm/npm-virtual/builder-util-runtime/-/builder-util-runtime-4.0.3.tgz#c9f1959598e3fb534cdbe9ce4160e985af11a0fe"
   dependencies:
@@ -1264,25 +1255,44 @@ builder-util-runtime@^4.0.2:
     fs-extra-p "^4.5.0"
     sax "^1.2.4"
 
-builder-util@4.1.7, builder-util@^4.1.7:
-  version "3.4.1"
-  resolved "https://artifactory.workday.com/artifactory/api/npm/npm-virtual/builder-util/-/builder-util-3.4.1.tgz#b9f079ff4c279699ca52f42930bab1c19ff62517"
+builder-util@4.1.7:
+  version "4.1.7"
+  resolved "https://artifactory.workday.com/artifactory/api/npm/npm-virtual/builder-util/-/builder-util-4.1.7.tgz#41f165ff6b3c8fde18ef4076e41a35a17c055a9d"
   dependencies:
-    "7zip-bin" "^2.2.7"
+    "7zip-bin" "^2.3.4"
     bluebird-lst "^1.0.5"
-    builder-util-runtime "^3.2.0"
+    builder-util-runtime "^4.0.2"
     chalk "^2.3.0"
     debug "^3.1.0"
-    fs-extra-p "^4.4.4"
+    fs-extra-p "^4.5.0"
     ini "^1.3.5"
-    is-ci "^1.0.10"
+    is-ci "^1.1.0"
     js-yaml "^3.10.0"
-    lazy-val "^1.0.2"
-    node-emoji "^1.8.1"
-    semver "^5.4.1"
-    source-map-support "^0.5.0"
+    lazy-val "^1.0.3"
+    semver "^5.5.0"
+    source-map-support "^0.5.1"
     stat-mode "^0.2.2"
-    temp-file "^2.1.1"
+    temp-file "^3.1.1"
+    tunnel-agent "^0.6.0"
+
+builder-util@^4.1.7:
+  version "4.2.1"
+  resolved "https://artifactory.workday.com/artifactory/api/npm/npm-virtual/builder-util/-/builder-util-4.2.1.tgz#ca9f0ddb5af1da5fe432129f7c6cbd447b552016"
+  dependencies:
+    "7zip-bin" "^2.4.1"
+    bluebird-lst "^1.0.5"
+    builder-util-runtime "^4.0.3"
+    chalk "^2.3.0"
+    debug "^3.1.0"
+    fs-extra-p "^4.5.0"
+    ini "^1.3.5"
+    is-ci "^1.1.0"
+    js-yaml "^3.10.0"
+    lazy-val "^1.0.3"
+    semver "^5.5.0"
+    source-map-support "^0.5.1"
+    stat-mode "^0.2.2"
+    temp-file "^3.1.1"
     tunnel-agent "^0.6.0"
 
 builtin-modules@^1.0.0, builtin-modules@^1.1.1:
@@ -1671,6 +1681,10 @@ core-js@^1.0.0:
 core-js@^2.4.0, core-js@^2.5.0:
   version "2.5.3"
   resolved "https://artifactory.workday.com/artifactory/api/npm/npm-virtual/core-js/-/core-js-2.5.3.tgz#8acc38345824f16d8365b7c9b4259168e8ed603e"
+
+core-js@~2.3.0:
+  version "2.3.0"
+  resolved "https://artifactory.workday.com/artifactory/api/npm/npm-virtual/core-js/-/core-js-2.3.0.tgz#fab83fbb0b2d8dc85fa636c4b9d34c75420c6d65"
 
 core-util-is@1.0.2, core-util-is@~1.0.0:
   version "1.0.2"
@@ -2373,6 +2387,10 @@ es6-promise@^4.0.5:
   version "4.2.2"
   resolved "https://artifactory.workday.com/artifactory/api/npm/npm-virtual/es6-promise/-/es6-promise-4.2.2.tgz#f722d7769af88bd33bc13ec6605e1f92966b82d9"
 
+es6-promise@~3.0.2:
+  version "3.0.2"
+  resolved "https://artifactory.workday.com/artifactory/api/npm/npm-virtual/es6-promise/-/es6-promise-3.0.2.tgz#010d5858423a5f118979665f46486a95c6ee2bb6"
+
 es6-set@~0.1.5:
   version "0.1.5"
   resolved "https://artifactory.workday.com/artifactory/api/npm/npm-virtual/es6-set/-/es6-set-0.1.5.tgz#d2b3ec5d4d800ced818db538d28974db0a73ccb1"
@@ -2894,6 +2912,10 @@ flatten@^1.0.2:
   version "1.0.2"
   resolved "https://artifactory.workday.com/artifactory/api/npm/npm-virtual/flatten/-/flatten-1.0.2.tgz#dae46a9d78fbe25292258cc1e780a41d95c03782"
 
+folktale@^v2.0.0-rc1:
+  version "2.0.1"
+  resolved "https://artifactory.workday.com/artifactory/api/npm/npm-virtual/folktale/-/folktale-2.0.1.tgz#6dc26a65565aefdef9520223e022dddf5b8d8462"
+
 for-in@^1.0.1:
   version "1.0.2"
   resolved "https://artifactory.workday.com/artifactory/api/npm/npm-virtual/for-in/-/for-in-1.0.2.tgz#81068d295a8142ec0ac726c6e2200c30fb6d5e80"
@@ -2936,7 +2958,7 @@ fresh@0.5.2:
   version "0.5.2"
   resolved "https://artifactory.workday.com/artifactory/api/npm/npm-virtual/fresh/-/fresh-0.5.2.tgz#3d8cadd90d976569fa835ab1f8e4b23a105605a7"
 
-fs-extra-p@^4.4.4, fs-extra-p@^4.5.0:
+fs-extra-p@^4.5.0:
   version "4.5.0"
   resolved "https://artifactory.workday.com/artifactory/api/npm/npm-virtual/fs-extra-p/-/fs-extra-p-4.5.0.tgz#b79f3f3fcc0b5e57b7e7caeb06159f958ef15fe8"
   dependencies:
@@ -3443,6 +3465,18 @@ ieee754@^1.1.4:
 ignore@^3.3.3:
   version "3.3.7"
   resolved "https://artifactory.workday.com/artifactory/api/npm/npm-virtual/ignore/-/ignore-3.3.7.tgz#612289bfb3c220e186a58118618d5be8c1bab021"
+
+immediate@~3.0.5:
+  version "3.0.6"
+  resolved "https://artifactory.workday.com/artifactory/api/npm/npm-virtual/immediate/-/immediate-3.0.6.tgz#9db1dbd0faf8de6fbe0f5dd5e56bb606280de69b"
+
+immutable-ext@^1.0.8:
+  version "1.1.2"
+  resolved "https://artifactory.workday.com/artifactory/api/npm/npm-virtual/immutable-ext/-/immutable-ext-1.1.2.tgz#051e20c19bc58609b8d939194cd105c1c58d152f"
+
+immutable@^3.8.1:
+  version "3.8.2"
+  resolved "https://artifactory.workday.com/artifactory/api/npm/npm-virtual/immutable/-/immutable-3.8.2.tgz#c2439951455bb39913daf281376f1530e104adf3"
 
 import-lazy@^2.1.0:
   version "2.1.0"
@@ -4178,6 +4212,16 @@ jsx-ast-utils@^2.0.0:
   dependencies:
     array-includes "^3.0.3"
 
+jszip@^3.1.3:
+  version "3.1.5"
+  resolved "https://artifactory.workday.com/artifactory/api/npm/npm-virtual/jszip/-/jszip-3.1.5.tgz#e3c2a6c6d706ac6e603314036d43cd40beefdf37"
+  dependencies:
+    core-js "~2.3.0"
+    es6-promise "~3.0.2"
+    lie "~3.1.0"
+    pako "~1.0.2"
+    readable-stream "~2.0.6"
+
 killable@^1.0.0:
   version "1.0.0"
   resolved "https://artifactory.workday.com/artifactory/api/npm/npm-virtual/killable/-/killable-1.0.0.tgz#da8b84bd47de5395878f95d64d02f2449fe05e6b"
@@ -4220,7 +4264,7 @@ lazy-req@^1.1.0:
   version "1.1.0"
   resolved "https://artifactory.workday.com/artifactory/api/npm/npm-virtual/lazy-req/-/lazy-req-1.1.0.tgz#bdaebead30f8d824039ce0ce149d4daa07ba1fac"
 
-lazy-val@^1.0.2, lazy-val@^1.0.3:
+lazy-val@^1.0.3:
   version "1.0.3"
   resolved "https://artifactory.workday.com/artifactory/api/npm/npm-virtual/lazy-val/-/lazy-val-1.0.3.tgz#bb97b200ef00801d94c317e29dc6ed39e31c5edc"
 
@@ -4240,6 +4284,12 @@ levn@^0.3.0, levn@~0.3.0:
   dependencies:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
+
+lie@~3.1.0:
+  version "3.1.1"
+  resolved "https://artifactory.workday.com/artifactory/api/npm/npm-virtual/lie/-/lie-3.1.1.tgz#9a436b2cc7746ca59de7a41fa469b3efb76bd87e"
+  dependencies:
+    immediate "~3.0.5"
 
 load-json-file@^1.0.0:
   version "1.1.0"
@@ -4327,10 +4377,6 @@ lodash.templatesettings@^4.0.0:
   resolved "https://artifactory.workday.com/artifactory/api/npm/npm-virtual/lodash.templatesettings/-/lodash.templatesettings-4.1.0.tgz#2b4d4e95ba440d915ff08bc899e4553666713316"
   dependencies:
     lodash._reinterpolate "~3.0.0"
-
-lodash.toarray@^4.4.0:
-  version "4.4.0"
-  resolved "https://artifactory.workday.com/artifactory/api/npm/npm-virtual/lodash.toarray/-/lodash.toarray-4.4.0.tgz#24c4bfcd6b2fba38bfd0594db1179d8e9b656561"
 
 lodash.uniq@^4.5.0:
   version "4.5.0"
@@ -4592,12 +4638,6 @@ no-case@^2.2.0:
   resolved "https://artifactory.workday.com/artifactory/api/npm/npm-virtual/no-case/-/no-case-2.3.2.tgz#60b813396be39b3f1288a4c1ed5d1e7d28b464ac"
   dependencies:
     lower-case "^1.1.1"
-
-node-emoji@^1.8.1:
-  version "1.8.1"
-  resolved "https://artifactory.workday.com/artifactory/api/npm/npm-virtual/node-emoji/-/node-emoji-1.8.1.tgz#6eec6bfb07421e2148c75c6bba72421f8530a826"
-  dependencies:
-    lodash.toarray "^4.4.0"
 
 node-fetch@^1.0.1:
   version "1.7.3"
@@ -4909,7 +4949,7 @@ package-json@^4.0.0:
     registry-url "^3.0.3"
     semver "^5.1.0"
 
-pako@~1.0.5:
+pako@~1.0.2, pako@~1.0.5:
   version "1.0.6"
   resolved "https://artifactory.workday.com/artifactory/api/npm/npm-virtual/pako/-/pako-1.0.6.tgz#0101211baa70c4bca4a0f63f2206e97b7dfaf258"
 
@@ -5738,6 +5778,17 @@ readable-stream@~1.1.9:
     isarray "0.0.1"
     string_decoder "~0.10.x"
 
+readable-stream@~2.0.6:
+  version "2.0.6"
+  resolved "https://artifactory.workday.com/artifactory/api/npm/npm-virtual/readable-stream/-/readable-stream-2.0.6.tgz#8f90341e68a53ccc928788dacfcd11b36eb9b78e"
+  dependencies:
+    core-util-is "~1.0.0"
+    inherits "~2.0.1"
+    isarray "~1.0.0"
+    process-nextick-args "~1.0.6"
+    string_decoder "~0.10.x"
+    util-deprecate "~1.0.1"
+
 readdirp@^2.0.0:
   version "2.1.0"
   resolved "https://artifactory.workday.com/artifactory/api/npm/npm-virtual/readdirp/-/readdirp-2.1.0.tgz#4ed0ad060df3073300c48440373f72d1cc642d78"
@@ -6172,6 +6223,15 @@ single-line-log@^1.1.2:
   dependencies:
     string-width "^1.0.1"
 
+sketch2json@^0.1.1:
+  version "0.1.1"
+  resolved "https://artifactory.workday.com/artifactory/api/npm/npm-virtual/sketch2json/-/sketch2json-0.1.1.tgz#08eb7cfd0218cfadf749f46f0e1147800e5ebac6"
+  dependencies:
+    folktale "^v2.0.0-rc1"
+    immutable "^3.8.1"
+    immutable-ext "^1.0.8"
+    jszip "^3.1.3"
+
 slash@^1.0.0:
   version "1.0.0"
   resolved "https://artifactory.workday.com/artifactory/api/npm/npm-virtual/slash/-/slash-1.0.0.tgz#c41f2f6c39fc16d1cd17ad4b5d896114ae470d55"
@@ -6232,7 +6292,7 @@ source-map-support@^0.4.15:
   dependencies:
     source-map "^0.5.6"
 
-source-map-support@^0.5.0:
+source-map-support@^0.5.1:
   version "0.5.2"
   resolved "https://artifactory.workday.com/artifactory/api/npm/npm-virtual/source-map-support/-/source-map-support-0.5.2.tgz#1a6297fd5b2e762b39688c7fc91233b60984f0a5"
   dependencies:
@@ -6538,15 +6598,6 @@ tar@^2.2.1:
     block-stream "*"
     fstream "^1.0.2"
     inherits "2"
-
-temp-file@^2.1.1:
-  version "2.1.3"
-  resolved "https://artifactory.workday.com/artifactory/api/npm/npm-virtual/temp-file/-/temp-file-2.1.3.tgz#cc54f01d367df6e36c1fefbd662afbd95fdd0f37"
-  dependencies:
-    async-exit-hook "^2.0.1"
-    bluebird-lst "^1.0.5"
-    fs-extra-p "^4.4.4"
-    lazy-val "^1.0.2"
 
 temp-file@^3.1.1:
   version "3.1.1"
