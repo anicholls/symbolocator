@@ -2,6 +2,10 @@ import React from 'react';
 
 export default class FileList extends React.Component {
   render() {
+    if (!this.props.visible) {
+      return null
+    }
+
     return (
       <div>
         <h4>{this.props.header}:</h4>

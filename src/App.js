@@ -23,6 +23,14 @@ class App extends Component {
     this.state = INITIAL_STATE
   }
 
+  getNumSketchFiles() {
+    return Object.keys(this.state.sketchFiles).length
+  }
+
+  getNumMatchedFiles() {
+    return Object.keys(this.state.matchedFiles).length
+  }
+
   onFileChange(e) {
     const files = Array.from(e.target.files)
 
@@ -35,8 +43,6 @@ class App extends Component {
         sketchFiles[file.webkitRelativePath] = file
       }
     }, this)
-
-    // Get symbol name from text input ref and set below
 
     this.setState({
       located: false,
@@ -79,39 +85,11 @@ class App extends Component {
   }
 
   render() {
-    var stepOne, stepTwo, sketchFiles, matchedFiles, restartButton;
-
-
-    if (!this.state.located && !this.state.symbolName) {
-      stepOne = (
-        <StepOne onSubmit={this.onStepOneSubmit.bind(this)} />
-      )
-    }
-
-    if (!this.state.located && this.state.symbolName && !Object.keys(this.state.sketchFiles).length) {
-      stepTwo = (
-        <StepTwo onFileChange={this.onFileChange.bind(this)} />
-      )
-    }
-
-    if (Object.keys(this.state.sketchFiles).length) {
-      sketchFiles = (
-        <FileList files={this.state.sketchFiles} header="Sketch Files" />
-      )
-    }
-
-    if (this.state.located && Object.keys(this.state.matchedFiles).length) {
-      matchedFiles = (
-        <FileList files={this.state.matchedFiles} header="Matched Files" />
-      )
-    }
-
-    if (Object.keys(this.state.sketchFiles).length) {
-      restartButton = (
-        <RestartButton onClick={this.restart.bind(this)} />
-      )
-    }
-
+    const showStepOne = (!this.state.located && !this.state.symbolName)
+    const showStepTwo = (!this.state.located && this.state.symbolName && !this.getNumSketchFiles())
+    const showRestartButton = (this.getNumSketchFiles() > 0)
+    const showSketchFiles = (this.getNumSketchFiles() > 0)
+    const showMatchedFiles = (this.state.located && this.getNumMatchedFiles() > 0)
 
     return (
       <div className="App">
@@ -119,11 +97,11 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Symbolocator</h1>
         </header>
-        { stepOne }
-        { stepTwo }
-        { restartButton }
-        { sketchFiles }
-        { matchedFiles }
+        <StepOne onSubmit={this.onStepOneSubmit.bind(this)} visible={showStepOne} />
+        <StepTwo onFileChange={this.onFileChange.bind(this)} visible={showStepTwo} />
+        <RestartButton onClick={this.restart.bind(this)} visible={showRestartButton}/>
+        <FileList files={this.state.sketchFiles} header="Sketch Files" visible={showSketchFiles} />
+        <FileList files={this.state.matchedFiles} header="Matched Files" visible={showMatchedFiles} />
       </div>
     );
   }
