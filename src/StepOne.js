@@ -9,10 +9,10 @@ export default class StepOne extends React.Component {
     return (
       <div className="step">
         <p className="App-intro">
-          Enter the name of the symbol you'd like to search for (the artboard name)
+          Enter the name of the symbol you're looking for (the artboard name)
         </p>
         <form onSubmit={this.props.onSubmit}>
-          <input type="text" placeholder="Enter a symbol name" /><br />
+          <input type="text" placeholder="Enter a symbol name" />
         </form>
       </div>
     )

@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import FileList from './FileList'
+import ProgressBar from './ProgressBar'
 import RestartButton from './RestartButton'
 import StepOne from './StepOne'
 import StepTwo from './StepTwo'
 import detectSymbol from './detectSymbol'
-import logo from './logo.svg';
-import './App.css';
-
-const SKETCH_FILE = '../test/test.sketch';
+import logo from './logo.svg'
+import './App.css'
 
 const INITIAL_STATE = {
   symbolName: '',
-  located: false,
+  searching: false,
+  checkCount: 0,
   sketchFiles: {},
   matchedFiles: {}
 }
@@ -21,6 +21,12 @@ class App extends Component {
     super(props);
 
     this.state = INITIAL_STATE
+
+    this.isElectron = false
+    var userAgent = navigator.userAgent.toLowerCase()
+    if (userAgent.indexOf(' electron/') > -1) {
+      this.isElectron = true
+    }
   }
 
   getNumSketchFiles() {
@@ -29,6 +35,10 @@ class App extends Component {
 
   getNumMatchedFiles() {
     return Object.keys(this.state.matchedFiles).length
+  }
+
+  hasSearched() {
+    return (this.state.searching || this.getNumSketchFiles())
   }
 
   onFileChange(e) {
@@ -45,33 +55,42 @@ class App extends Component {
     }, this)
 
     this.setState({
-      located: false,
+      searching: true,
       sketchFiles: sketchFiles,
       matchedFiles: {}
     }, this.locateSymbol)
   }
 
-  addMatch(file) {
-    const matchedFiles = this.state.matchedFiles
-    matchedFiles[file.path] = file
+  fileRead(file, detected) {
+    const checkCount = this.state.checkCount + 1
+    let searching = this.state.searching
 
-    this.setState({
-      located: true,
-      matchedFiles: matchedFiles
-    })
+    // Last file has been read
+    if (checkCount === this.getNumSketchFiles() - 1) {
+      searching = false
+    }
+    this.setState({ checkCount, searching })
+
+    if (detected) {
+      const matchedFiles = this.state.matchedFiles
+      matchedFiles[file.webkitRelativePath] = file
+
+      this.setState({ matchedFiles: matchedFiles })
+    }
   }
 
   locateSymbol() {
     const matchedFiles = {}
 
-    Object.keys(this.state.sketchFiles).forEach(path => {
+    Object.keys(this.state.sketchFiles).forEach((path, index) => {
       const file = this.state.sketchFiles[path]
-      const detected = detectSymbol(file, this.state.symbolName, this.addMatch.bind(this))
+      const detected = detectSymbol(file, this.state.symbolName,
+          this.fileRead.bind(this))
 
       if (detected) {
         matchedFiles[path] = file
       }
-    })
+    }, this)
   }
 
   onStepOneSubmit(e) {
@@ -85,11 +104,14 @@ class App extends Component {
   }
 
   render() {
-    const showStepOne = (!this.state.located && !this.state.symbolName)
-    const showStepTwo = (!this.state.located && this.state.symbolName && !this.getNumSketchFiles())
-    const showRestartButton = (this.getNumSketchFiles() > 0)
-    const showSketchFiles = (this.getNumSketchFiles() > 0)
-    const showMatchedFiles = (this.state.located && this.getNumMatchedFiles() > 0)
+    const showStepOne = (!this.hasSearched() && !this.state.symbolName)
+    const showStepTwo = (!this.hasSearched() && this.state.symbolName)
+    const showRestartButton = (this.hasSearched() && this.getNumSketchFiles() > 0)
+    const showProgressBar = (this.hasSearched() && this.getNumSketchFiles() > 0)
+    const showSketchFiles = (this.hasSearched())
+    const showMatchedFiles = (this.hasSearched() && this.getNumMatchedFiles() > 0)
+
+    const percentage = this.state.checkCount / this.getNumSketchFiles()
 
     return (
       <div className="App">
@@ -97,8 +119,9 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Symbolocator</h1>
         </header>
+        <ProgressBar percentage={percentage} visible={showProgressBar} />
         <StepOne onSubmit={this.onStepOneSubmit.bind(this)} visible={showStepOne} />
-        <StepTwo onFileChange={this.onFileChange.bind(this)} visible={showStepTwo} />
+        <StepTwo onFileChange={this.onFileChange.bind(this)} visible={showStepTwo} isElectron={this.isElectron} />
         <RestartButton onClick={this.restart.bind(this)} visible={showRestartButton}/>
         <FileList files={this.state.sketchFiles} header="Sketch Files" visible={showSketchFiles} />
         <FileList files={this.state.matchedFiles} header="Matched Files" visible={showMatchedFiles} />

@@ -6,9 +6,11 @@ export default class FileList extends React.Component {
       return null
     }
 
+    const numFiles = Object.keys(this.props.files).length
+
     return (
       <div>
-        <h4>{this.props.header}:</h4>
+        <h4>{this.props.header} ({numFiles}):</h4>
         <ul>
           { Object.keys(this.props.files).map((path, index) => {
               const file = this.props.files[path]
