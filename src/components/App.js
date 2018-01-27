@@ -4,9 +4,9 @@ import ProgressBar from './ProgressBar'
 import RestartButton from './RestartButton'
 import StepOne from './StepOne'
 import StepTwo from './StepTwo'
-import * as utils from './utils'
-import detectSymbol from './detectSymbol'
-import logo from './logo.svg'
+import * as utils from '../utils/utils'
+import detectSymbol from '../utils/detectSymbol'
+import logo from '../logo.svg'
 import './App.css'
 
 const INITIAL_STATE = {

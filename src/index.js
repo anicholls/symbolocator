@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import App from './components/App';
 import registerServiceWorker from './registerServiceWorker';
 
 registerServiceWorker();
@@ -16,8 +16,8 @@ function render(Component) {
 render(App);
 
 if (module.hot) {
-  module.hot.accept('./App', () => {
-    const NextApp = require('./App').default;
+  module.hot.accept('./components/App', () => {
+    const NextApp = require('./components/App').default;
     render(NextApp);
   })
 }
