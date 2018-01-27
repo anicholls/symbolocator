@@ -16,11 +16,12 @@ export default class StepOne extends React.Component {
 
     return (
       <div className="step">
-        <p className="App-intro">
-          Enter the name of the symbol you're looking for (the artboard name)
+        <p className="step-label">
+          Enter the name of the symbol you're looking for:
         </p>
         <form onSubmit={this.onSubmit.bind(this)}>
           <input type="text" placeholder="Enter a symbol name" />
+          <button type="submit" className="submit-btn">Next</button>
         </form>
       </div>
     )

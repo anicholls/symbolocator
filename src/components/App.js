@@ -10,6 +10,7 @@ import './App.css'
 
 const INITIAL_STATE = {
   symbolName: '',
+  directoryPath: '',
   searching: false,
   checkCount: 0,
   sketchFiles: [],
@@ -36,6 +37,10 @@ class App extends Component {
 
     // TODO: Once we have a list of sketch files, resize window to display
     // https://discuss.atom.io/t/how-to-re-size-electron-main-window-dynamically/48183
+  }
+
+  updateDirectoryPath(directoryPath) {
+    this.setState({ directoryPath })
   }
 
   onFileRead(file, detected) {
@@ -80,10 +85,10 @@ class App extends Component {
     const percentage = this.state.checkCount / this.state.sketchFiles.length
 
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Symbolocator</h1>
+      <div className="symbolocator">
+        <header className="header">
+          <img src={logo} className="logo" alt="logo" />
+          <h1 className="title">Symbolocator</h1>
         </header>
         <ProgressBar percentage={percentage} visible={showProgressBar} />
         <StepOne
@@ -92,13 +97,24 @@ class App extends Component {
         />
         <StepTwo
           symbolName={this.state.symbolName}
+          updateDirectoryPath={this.updateDirectoryPath.bind(this)}
           updateSketchFiles={this.updateSketchFiles.bind(this)}
           onFileRead={this.onFileRead.bind(this)}
           visible={showStepTwo}
         />
         <RestartButton onClick={this.restart.bind(this)} visible={showRestartButton}/>
-        <FileList files={this.state.sketchFiles} header="Sketch Files" visible={showSketchFiles} />
-        <FileList files={this.state.matchedFiles} header="Matched Files" visible={showMatchedFiles} />
+        <FileList
+          directoryPath={this.state.directoryPath}
+          files={this.state.sketchFiles}
+          header="Sketch Files"
+          visible={showSketchFiles}
+        />
+        <FileList
+          directoryPath={this.state.directoryPath}
+          files={this.state.matchedFiles}
+          header="Matched Files"
+          visible={showMatchedFiles}
+        />
       </div>
     );
   }

@@ -17,7 +17,10 @@ export default class StepTwo extends React.Component {
     // Electron only returns the path of the directory
     const dir = paths[0]
 
-    // Get Recursively get the path of all the files in a folder.
+    // Update the app state w/ folder path
+    this.props.updateDirectoryPath(dir)
+
+    // Recursively get the path of all the files in a folder.
     const files = utils.getSketchFilesFromDir(dir)
 
     // Update app state sketchFiles
@@ -42,10 +45,10 @@ export default class StepTwo extends React.Component {
 
     return (
       <div className="step">
-        <p className="App-intro">
-          Select the folder you would like to search within
+        <p className="step-label">
+          Select a folder containing sketch files to search within:
         </p>
-        <button onClick={this.onClick.bind(this)}>Select Folder</button>
+        <button onClick={this.onClick.bind(this)} className="submit-btn">Browse</button>
       </div>
     )
   }
