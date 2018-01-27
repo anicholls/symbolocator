@@ -5,7 +5,6 @@ import RestartButton from './RestartButton'
 import StepOne from './StepOne'
 import StepTwo from './StepTwo'
 import * as utils from '../utils/utils'
-import detectSymbol from '../utils/detectSymbol'
 import logo from '../logo.svg'
 import './App.css'
 
@@ -13,8 +12,8 @@ const INITIAL_STATE = {
   symbolName: '',
   searching: false,
   checkCount: 0,
-  sketchFiles: {},
-  matchedFiles: {}
+  sketchFiles: [],
+  matchedFiles: []
 }
 
 class App extends Component {
@@ -24,72 +23,37 @@ class App extends Component {
     this.state = INITIAL_STATE
   }
 
-  getNumSketchFiles() {
-    return Object.keys(this.state.sketchFiles).length
-  }
-
-  getNumMatchedFiles() {
-    return Object.keys(this.state.matchedFiles).length
-  }
-
   hasSearched() {
-    return (this.state.searching || this.getNumSketchFiles())
+    return (this.state.searching || this.state.sketchFiles.length)
   }
 
-  onFileChange(e) {
-    const files = Array.from(e.target.files)
-    let sketchFiles = []
-
-    // Electron only returns the path of the directory
-    if (utils.isElectron()) {
-      sketchFiles = utils.getSketchFilesElectron(files[0].path)
-    } else {
-      sketchFiles = utils.getSketchFiles(files)
-    }
-
-    this.setState({
-      searching: true,
-      sketchFiles: sketchFiles,
-      matchedFiles: {}
-    }, this.locateSymbol)
+  onSymbolName(symbolName) {
+    this.setState({ symbolName })
   }
 
-  fileRead(file, detected) {
+  updateSketchFiles(sketchFiles) {
+    this.setState({ sketchFiles })
+  }
+
+  onFileRead(file, detected) {
     const checkCount = this.state.checkCount + 1
     let searching = this.state.searching
 
     // Last file has been read
-    if (checkCount === this.getNumSketchFiles() - 1) {
+    if (checkCount === this.state.sketchFiles.length - 1) {
       searching = false
     }
-    this.setState({ checkCount, searching })
 
     if (detected) {
-      const matchedFiles = this.state.matchedFiles
-      matchedFiles[file.webkitRelativePath] = file
-
-      this.setState({ matchedFiles: matchedFiles })
+      this.setState({
+        checkCount,
+        searching,
+        matchedFiles: this.state.matchedFiles.concat(file)
+      })
     }
-  }
-
-  locateSymbol() {
-    const matchedFiles = {}
-
-    Object.keys(this.state.sketchFiles).forEach((path, index) => {
-      const file = this.state.sketchFiles[path]
-      const detected = detectSymbol(file, this.state.symbolName,
-          this.fileRead.bind(this))
-
-      if (detected) {
-        matchedFiles[path] = file
-      }
-    }, this)
-  }
-
-  onStepOneSubmit(e) {
-    const input = e.target.elements[0]
-
-    this.setState({ symbolName: input.value })
+    else {
+      this.setState({ checkCount, searching })
+    }
   }
 
   restart() {
@@ -97,14 +61,20 @@ class App extends Component {
   }
 
   render() {
+    if (!utils.isElectron()) {
+      return (
+        <div>Only the electron browser is supported</div>
+      )
+    }
+
     const showStepOne = (!this.hasSearched() && !this.state.symbolName)
     const showStepTwo = (!this.hasSearched() && this.state.symbolName)
-    const showRestartButton = (this.hasSearched() && this.getNumSketchFiles() > 0)
-    const showProgressBar = (this.hasSearched() && this.getNumSketchFiles() > 0)
+    const showRestartButton = (this.hasSearched() && this.state.sketchFiles.length > 0)
+    const showProgressBar = (this.hasSearched() && this.state.sketchFiles.length > 0)
     const showSketchFiles = (this.hasSearched())
-    const showMatchedFiles = (this.hasSearched() && this.getNumMatchedFiles() > 0)
+    const showMatchedFiles = (this.hasSearched() && this.state.matchedFiles.length > 0)
 
-    const percentage = this.state.checkCount / this.getNumSketchFiles()
+    const percentage = this.state.checkCount / this.state.sketchFiles.length
 
     return (
       <div className="App">
@@ -113,8 +83,16 @@ class App extends Component {
           <h1 className="App-title">Symbolocator</h1>
         </header>
         <ProgressBar percentage={percentage} visible={showProgressBar} />
-        <StepOne onSubmit={this.onStepOneSubmit.bind(this)} visible={showStepOne} />
-        <StepTwo onFileChange={this.onFileChange.bind(this)} visible={showStepTwo} isElectron={this.isElectron} />
+        <StepOne
+          onSymbolName={this.onSymbolName.bind(this)}
+          visible={showStepOne}
+        />
+        <StepTwo
+          symbolName={this.state.symbolName}
+          updateSketchFiles={this.updateSketchFiles.bind(this)}
+          onFileRead={this.onFileRead.bind(this)}
+          visible={showStepTwo}
+        />
         <RestartButton onClick={this.restart.bind(this)} visible={showRestartButton}/>
         <FileList files={this.state.sketchFiles} header="Sketch Files" visible={showSketchFiles} />
         <FileList files={this.state.matchedFiles} header="Matched Files" visible={showMatchedFiles} />

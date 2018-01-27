@@ -12,11 +12,9 @@ export default class FileList extends React.Component {
       <div>
         <h4>{this.props.header} ({numFiles}):</h4>
         <ul>
-          { Object.keys(this.props.files).map((path, index) => {
-              const file = this.props.files[path]
-
+          { this.props.files.map((path, index) => {
               return (
-                <li key={index}>{ file.webkitRelativePath }</li>
+                <li key={index}>{ path }</li>
               )
           })}
         </ul>
