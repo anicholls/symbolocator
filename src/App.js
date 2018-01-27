@@ -4,6 +4,7 @@ import ProgressBar from './ProgressBar'
 import RestartButton from './RestartButton'
 import StepOne from './StepOne'
 import StepTwo from './StepTwo'
+import * as utils from './utils'
 import detectSymbol from './detectSymbol'
 import logo from './logo.svg'
 import './App.css'
@@ -21,12 +22,6 @@ class App extends Component {
     super(props);
 
     this.state = INITIAL_STATE
-
-    this.isElectron = false
-    var userAgent = navigator.userAgent.toLowerCase()
-    if (userAgent.indexOf(' electron/') > -1) {
-      this.isElectron = true
-    }
   }
 
   getNumSketchFiles() {
@@ -43,16 +38,14 @@ class App extends Component {
 
   onFileChange(e) {
     const files = Array.from(e.target.files)
+    let sketchFiles = []
 
-    const sketchFiles = {}
-
-    files.forEach(file => {
-      const extension = file.name.split('.').pop()
-
-      if (extension === 'sketch') {
-        sketchFiles[file.webkitRelativePath] = file
-      }
-    }, this)
+    // Electron only returns the path of the directory
+    if (utils.isElectron()) {
+      sketchFiles = utils.getSketchFilesElectron(files[0].path)
+    } else {
+      sketchFiles = utils.getSketchFiles(files)
+    }
 
     this.setState({
       searching: true,
