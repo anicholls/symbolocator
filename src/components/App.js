@@ -33,6 +33,9 @@ class App extends Component {
 
   updateSketchFiles(sketchFiles) {
     this.setState({ sketchFiles })
+
+    // TODO: Once we have a list of sketch files, resize window to display
+    // https://discuss.atom.io/t/how-to-re-size-electron-main-window-dynamically/48183
   }
 
   onFileRead(file, detected) {

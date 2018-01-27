@@ -7,6 +7,13 @@ const {dialog} = window.require('electron').remote
 
 export default class StepTwo extends React.Component {
   onFolderSelect(paths) {
+    // The user closed the modal without selecting a folder
+    // TODO: solve this better because it's an endless loop
+    if (!paths) {
+      this.onClick()
+      return
+    }
+
     // Electron only returns the path of the directory
     const dir = paths[0]
 
@@ -16,11 +23,13 @@ export default class StepTwo extends React.Component {
     // Update app state sketchFiles
     this.props.updateSketchFiles(files)
 
+    // TODO: Use async library to limit file parsing
+    // https://stackoverflow.com/questions/9539886/limiting-asynchronous-calls-in-node-js
     utils.detectSymbolInFiles(
       this.props.symbolName, files, this.props.onFileRead)
   }
 
-  onClick(e) {
+  onClick() {
     dialog.showOpenDialog({
       properties: ['openDirectory']
     }, this.onFolderSelect.bind(this))
