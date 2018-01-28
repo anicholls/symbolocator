@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import FileList from './FileList'
+import MatchedFiles from './MatchedFiles'
 import ProgressBar from './ProgressBar'
 import RestartButton from './RestartButton'
 import StepOne from './StepOne'
 import StepTwo from './StepTwo'
-import * as utils from '../utils/utils'
+import { isElectron } from '../utils/utils'
 import logo from '../logo.svg'
 import './App.css'
 
@@ -69,7 +70,7 @@ class App extends Component {
   }
 
   render() {
-    if (!utils.isElectron()) {
+    if (!isElectron()) {
       return (
         <div>Only the electron browser is supported</div>
       )
@@ -80,7 +81,6 @@ class App extends Component {
     const showRestartButton = (this.hasSearched() && this.state.sketchFiles.length > 0)
     const showProgressBar = (this.hasSearched() && this.state.sketchFiles.length > 0)
     const showSketchFiles = (this.hasSearched())
-    const showMatchedFiles = (this.hasSearched() && this.state.matchedFiles.length > 0)
 
     const percentage = this.state.checkCount / this.state.sketchFiles.length
 
@@ -109,11 +109,12 @@ class App extends Component {
           header="Sketch Files"
           visible={showSketchFiles}
         />
-        <FileList
+        <MatchedFiles
+          percentage={percentage}
           directoryPath={this.state.directoryPath}
           files={this.state.matchedFiles}
-          header="Matched Files"
-          visible={showMatchedFiles}
+          header="Sketch Files"
+          visible={showSketchFiles}
         />
       </div>
     );
