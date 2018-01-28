@@ -20,7 +20,7 @@ const INITIAL_STATE = {
 
 class App extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = INITIAL_STATE
   }
@@ -108,6 +108,7 @@ class App extends Component {
           files={this.state.sketchFiles}
           header="Sketch Files"
           visible={showSketchFiles}
+          collapsed={true}
         />
         <MatchedFiles
           percentage={percentage}

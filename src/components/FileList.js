@@ -1,6 +1,18 @@
 import React from 'react';
 
 export default class FileList extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      collapsed: this.props.collapsed
+    }
+  }
+
+  toggleCollapsed() {
+    this.setState({ collapsed: !this.state.collapsed })
+  }
+
   render() {
     if (!this.props.visible) {
       return null
@@ -8,9 +20,14 @@ export default class FileList extends React.Component {
 
     const numFiles = Object.keys(this.props.files).length
 
+    const toggleIndicator = (this.state.collapsed) ? 'Expand' : 'Collapse'
+
     return (
-      <div className="file-list">
-        <h4>{this.props.header} ({numFiles}):</h4>
+      <div className={this.state.collapsed ? 'file-list collapsed' : 'file-list'}>
+        <h4 onClick={this.toggleCollapsed.bind(this)}>
+          {this.props.header} ({numFiles}):
+          <span className="collapse-toggle">{toggleIndicator}</span>
+        </h4>
         <ul>
           { this.props.files.map((path, index) => {
               const relPath = path.replace(this.props.directoryPath, '')
