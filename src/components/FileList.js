@@ -25,7 +25,7 @@ export default class FileList extends React.Component {
     return (
       <div className={this.state.collapsed ? 'file-list collapsed' : 'file-list'}>
         <h4 onClick={this.toggleCollapsed.bind(this)}>
-          {this.props.header} ({numFiles}):
+          {this.props.header} ({numFiles})
           <span className="collapse-toggle">{toggleIndicator}</span>
         </h4>
         <ul>

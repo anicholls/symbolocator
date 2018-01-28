@@ -3,6 +3,7 @@ import FileList from './FileList'
 import MatchedFiles from './MatchedFiles'
 import ProgressBar from './ProgressBar'
 import RestartButton from './RestartButton'
+import SearchInfo from './SearchInfo'
 import StepOne from './StepOne'
 import StepTwo from './StepTwo'
 import { isElectron } from '../utils/utils'
@@ -80,7 +81,6 @@ class App extends Component {
     const showStepTwo = (!this.hasSearched() && this.state.symbolName)
     const showRestartButton = (this.hasSearched() && this.state.sketchFiles.length > 0)
     const showProgressBar = (this.hasSearched() && this.state.sketchFiles.length > 0)
-    const showSketchFiles = (this.hasSearched())
 
     const percentage = this.state.checkCount / this.state.sketchFiles.length
 
@@ -102,12 +102,20 @@ class App extends Component {
           onFileRead={this.onFileRead.bind(this)}
           visible={showStepTwo}
         />
-        <RestartButton onClick={this.restart.bind(this)} visible={showRestartButton}/>
+        <RestartButton
+          onClick={this.restart.bind(this)}
+          visible={showRestartButton}
+        />
+        <SearchInfo
+          directoryPath={this.state.directoryPath}
+          symbolName={this.state.symbolName}
+          visible={this.hasSearched()}
+        />
         <FileList
           directoryPath={this.state.directoryPath}
           files={this.state.sketchFiles}
           header="Sketch Files"
-          visible={showSketchFiles}
+          visible={this.hasSearched()}
           collapsed={true}
         />
         <MatchedFiles
@@ -115,7 +123,7 @@ class App extends Component {
           directoryPath={this.state.directoryPath}
           files={this.state.matchedFiles}
           header="Sketch Files"
-          visible={showSketchFiles}
+          visible={this.hasSearched()}
         />
       </div>
     );
