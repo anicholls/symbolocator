@@ -9,7 +9,7 @@ export default class MatchedFiles extends React.Component {
 
     var noMatches
 
-    if (this.props.percentage == 1 && !this.props.files.length) {
+    if (this.props.percentage === 1 && !this.props.files.length) {
       noMatches = (
         <div>No matches found</div>
       )

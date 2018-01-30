@@ -1,3 +1,5 @@
+
+import async from 'async'
 import sketch2json from 'sketch2json'
 
 // hack for electron fs & path
@@ -31,7 +33,8 @@ export function getSketchFilesFromDir(dir) {
 }
 
 export function detectSymbolInFiles(symbolName, files, callback) {
-  files.map(path => {
+  // Parse 20 files at once
+  async.mapLimit(files, 20, async (path, done) => {
     return fs.readFile(path, (error, sketch) => {
       if (error) {
         console.log(error)
@@ -41,6 +44,7 @@ export function detectSymbolInFiles(symbolName, files, callback) {
         .then(detectSymbol.bind(sketch, symbolName))
         .then(detected => {
           callback(path, detected)
+          done()
         })
         .catch(err => {
           console.log(err)

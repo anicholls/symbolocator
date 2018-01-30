@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import * as utils from '../utils/utils'
 
 // window.require is only defined for electron
@@ -17,17 +17,15 @@ export default class StepTwo extends React.Component {
     // Electron only returns the path of the directory
     const dir = paths[0]
 
-    // Update the app state w/ folder path
+    // TODO: Show loading spinner while we find all directories.
+    // Disable when on this.props.updateSketchFiles
+
     this.props.updateDirectoryPath(dir)
 
-    // Recursively get the path of all the files in a folder.
     const files = utils.getSketchFilesFromDir(dir)
 
-    // Update app state sketchFiles
     this.props.updateSketchFiles(files)
 
-    // TODO: Use async library to limit file parsing
-    // https://stackoverflow.com/questions/9539886/limiting-asynchronous-calls-in-node-js
     utils.detectSymbolInFiles(
       this.props.symbolName, files, this.props.onFileRead)
   }
