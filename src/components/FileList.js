@@ -5,7 +5,8 @@ export default class FileList extends React.Component {
     super(props)
 
     this.state = {
-      collapsed: this.props.collapsed
+      collapsed: this.props.collapsed,
+      visible: this.props.visible || true
     }
   }
 
@@ -14,7 +15,7 @@ export default class FileList extends React.Component {
   }
 
   render() {
-    if (!this.props.visible) {
+    if (!this.state.visible) {
       return null
     }
 

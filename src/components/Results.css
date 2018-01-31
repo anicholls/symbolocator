@@ -1,0 +1,55 @@
+.result-tab-bar {
+  list-style: none;
+  padding: 12px 32px 0;
+  margin: 0;
+  display: flex;
+  justify-content: space-around;
+  background-color: #222;
+  color: #fff;
+}
+.result-tab-bar li {
+  cursor: pointer;
+  height: 36px;
+  position: relative;
+}
+.results .result-tab-bar .matches:after,
+.results .result-tab-bar .progress:after {
+  content: '';
+  height: 3px;
+  width: 0;
+  transition: width 0.2s ease-out;
+  display: block;
+  border-radius: 3px;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.results.matches .result-tab-bar .matches:after,
+.results.progress .result-tab-bar .progress:after {
+  width: 100%;
+  background-image: linear-gradient(
+    to top right,
+    #EE6C01  0%,
+    #FECD18  100%
+  );
+}
+.result-tab-panels {
+  width: 200vw;
+  display: flex;
+  transition: transform 0.2s ease-out;
+}
+.results.matches .result-tab-panels {
+  transform: translateX(-50%);
+}
+.result-tab-panels .progress,
+.result-tab-panels .matches {
+  width: 100vw;
+}
+.result-tab-panels .progress {
+  padding-top: 48px;
+}
+
+.results .circular-progress-bar {
+  margin-bottom: 32px;
+}

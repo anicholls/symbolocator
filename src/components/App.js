@@ -1,9 +1,5 @@
 import React, { Component } from 'react'
-import FileList from './FileList'
-import MatchedFiles from './MatchedFiles'
-import ProgressBar from './ProgressBar'
-import RestartButton from './RestartButton'
-import SearchInfo from './SearchInfo'
+import Results from './Results'
 import StepOne from './StepOne'
 import StepTwo from './StepTwo'
 import { isElectron } from '../utils/utils'
@@ -13,6 +9,7 @@ import './App.css'
 const INITIAL_STATE = {
   symbolName: '',
   directoryPath: '',
+  loadingDirectory: false,
   searching: false,
   checkCount: 0,
   sketchFiles: [],
@@ -34,15 +31,17 @@ class App extends Component {
     this.setState({ symbolName })
   }
 
+  updateDirectoryPath(directoryPath) {
+    // Set directory path and show loading spinner while we read the dir
+    this.setState({ directoryPath, loadingDirectory: true })
+  }
+
   updateSketchFiles(sketchFiles) {
-    this.setState({ sketchFiles })
+    // Set sketch files & hide loading spinner
+    this.setState({ sketchFiles, loadingDirectory: false })
 
     // TODO: Once we have a list of sketch files, resize window to display
     // https://discuss.atom.io/t/how-to-re-size-electron-main-window-dynamically/48183
-  }
-
-  updateDirectoryPath(directoryPath) {
-    this.setState({ directoryPath })
   }
 
   onFileRead(file, detected) {
@@ -79,10 +78,6 @@ class App extends Component {
 
     const showStepOne = (!this.hasSearched() && !this.state.symbolName)
     const showStepTwo = (!this.hasSearched() && this.state.symbolName)
-    const showRestartButton = (this.hasSearched() && this.state.sketchFiles.length > 0)
-    const showProgressBar = (this.hasSearched() && this.state.sketchFiles.length > 0)
-
-    const percentage = this.state.checkCount / this.state.sketchFiles.length
 
     return (
       <div className="symbolocator">
@@ -90,7 +85,6 @@ class App extends Component {
           <img src={logo} className="logo" alt="logo" />
           <h1 className="title">Symbolocator</h1>
         </header>
-        <ProgressBar percentage={percentage} visible={showProgressBar} />
         <StepOne
           onSymbolName={this.onSymbolName.bind(this)}
           visible={showStepOne}
@@ -102,27 +96,13 @@ class App extends Component {
           onFileRead={this.onFileRead.bind(this)}
           visible={showStepTwo}
         />
-        <RestartButton
-          onClick={this.restart.bind(this)}
-          visible={showRestartButton}
-        />
-        <SearchInfo
+        <Results
           directoryPath={this.state.directoryPath}
+          sketchFiles={this.state.sketchFiles}
+          matches={this.state.matchedFiles}
+          checkCount={this.state.checkCount}
           symbolName={this.state.symbolName}
-          visible={this.hasSearched()}
-        />
-        <FileList
-          directoryPath={this.state.directoryPath}
-          files={this.state.sketchFiles}
-          header="Sketch Files"
-          visible={this.hasSearched()}
-          collapsed={true}
-        />
-        <MatchedFiles
-          percentage={percentage}
-          directoryPath={this.state.directoryPath}
-          files={this.state.matchedFiles}
-          header="Sketch Files"
+          restart={this.restart.bind(this)}
           visible={this.hasSearched()}
         />
       </div>

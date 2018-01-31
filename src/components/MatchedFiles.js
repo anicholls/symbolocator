@@ -2,8 +2,16 @@ import React from 'react';
 import FileList from './FileList'
 
 export default class MatchedFiles extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      visible: this.props.visible || true
+    }
+  }
+
   render() {
-    if (!this.props.visible) {
+    if (!this.state.visible) {
       return null
     }
 
@@ -21,7 +29,6 @@ export default class MatchedFiles extends React.Component {
           directoryPath={this.props.directoryPath}
           files={this.props.files}
           header="Matched Files"
-          visible={true}
         />
         { noMatches }
       </div>

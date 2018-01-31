@@ -1,0 +1,41 @@
+.circular-progress-bar {
+  position: relative;
+}
+
+.circle-background,
+.circle-progress {
+  fill: none;
+}
+
+.circle-background {
+  stroke: #ddd;
+}
+
+.circle-progress {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke-dasharray 1s ease;
+}
+
+.circular-progress-bar .progress-info {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.circular-progress-bar .percentage {
+  font-size: 42px;
+  font-weight: 600;
+  line-height: 48px;
+  background: linear-gradient(
+    to top right,
+    #EE6C01  0%,
+    #FECD18  100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.circular-progress-bar .subtext {
+  color: #b1b1b1;
+}
