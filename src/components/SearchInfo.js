@@ -14,8 +14,6 @@ export default class SearchInfo extends React.Component {
       return null
     }
 
-    const percentage = parseInt(this.props.checkCount / this.props.numSketchFiles * 100)
-
     return (
       <ul className="search-info">
         <li>

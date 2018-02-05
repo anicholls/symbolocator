@@ -35,22 +35,39 @@ export function getSketchFilesFromDir(dir) {
 export function detectSymbolInFiles(symbolName, files, callback) {
   // Parse 20 files at once
   async.mapLimit(files, 20, async (path, done) => {
-    return fs.readFile(path, (error, sketch) => {
-      if (error) {
-        console.log(error)
-      }
-
-      sketch2json(sketch)
-        .then(detectSymbol.bind(sketch, symbolName))
-        .then(detected => {
-          callback(path, detected)
-          done()
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    })
-  })
+    let chunk
+    let chunks = []
+    const readStream = fs.createReadStream(path)
+    readStream
+      .on('readable', () => {
+        while ((chunk = readStream.read()) != null) {
+          chunks.push(chunk)
+        }
+      })
+      .on('error', err => {
+        throw err
+      })
+      .on('end', () => {
+        const data = window.Buffer.concat(chunks)
+        sketch2json(data)
+          .then(detectSymbol.bind(data, symbolName))
+          .then(detected => {
+            callback(path, detected)
+            done()
+          })
+          .catch(err => {
+            if (err.message.startsWith(
+              'Can\'t find end of central directory : is this a zip file')) {
+              // TODO: Callback that this is an invalid sketch file (pre 43)
+            } else {
+              console.log(err)
+            }
+            callback(path, false)
+            done()
+          })
+      })
+    }
+  )
 }
 
 function detectSymbol(symbolName, sketch) {
@@ -59,7 +76,6 @@ function detectSymbol(symbolName, sketch) {
   }
 
   let symbols;
-  let detected = false
 
   for (var id in sketch.pages) {
     let page = sketch.pages[id]
@@ -76,9 +92,9 @@ function detectSymbol(symbolName, sketch) {
 
   for (var artboard of symbols.layers) {
     if (artboard.name === symbolName) {
-      detected = true
+      return true
     }
   }
 
-  return detected
+  return false
 }

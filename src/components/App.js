@@ -65,6 +65,7 @@ class App extends Component {
     }
   }
 
+  // TODO: Make this stop parsing sketch files
   restart() {
     this.setState(INITIAL_STATE)
   }

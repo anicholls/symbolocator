@@ -31,7 +31,7 @@ export default class FileList extends React.Component {
         </h4>
         <ul>
           { this.props.files.map((path, index) => {
-              const relPath = path.replace(this.props.directoryPath, '')
+              const relPath = path.replace(this.props.directoryPath, '.')
               return (
                 <li key={index}>{ relPath }</li>
               )
