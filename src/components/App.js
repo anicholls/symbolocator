@@ -84,6 +84,7 @@ class App extends Component {
           symbolName={this.state.symbolName}
           directoryPath={this.state.results.path}
           sketchFiles={this.state.results.sketchFiles}
+          errors={this.state.results.errors}
           matches={this._getMatchedFiles()}
           checkCount={this._getCheckedCount()}
           restart={this.restart.bind(this)}
