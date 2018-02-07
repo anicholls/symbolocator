@@ -1,12 +1,11 @@
 import React from 'react'
-import * as utils from '../utils/utils'
 
 // window.require is only defined for electron
-const {dialog} = window.require('electron').remote
-
+const {remote} = window.require('electron')
+const detectSymbolInPath = remote.require('symbolocator-cli')
 
 export default class StepTwo extends React.Component {
-  onFolderSelect(paths) {
+  _onFolderSelect(paths) {
     // The user closed the modal without selecting a folder
     // TODO: solve this better because it's an endless loop
     if (!paths) {
@@ -17,23 +16,17 @@ export default class StepTwo extends React.Component {
     // Electron only returns the path of the directory
     const dir = paths[0]
 
-    // TODO: Show loading spinner while we find all directories.
-    // Disable when on this.props.updateSketchFiles
-
-    this.props.updateDirectoryPath(dir)
-
-    const files = utils.getSketchFilesFromDir(dir)
-
-    this.props.updateSketchFiles(files)
-
-    utils.detectSymbolInFiles(
-      this.props.symbolName, files, this.props.onFileRead)
+    detectSymbolInPath(dir, this.props.symbolName, this.props.updateResults)
+      .then(result => {
+        this.props.setResults(result)
+      })
+      .catch(err => { throw err })
   }
 
   onClick() {
-    dialog.showOpenDialog({
+    remote.dialog.showOpenDialog({
       properties: ['openDirectory']
-    }, this.onFolderSelect.bind(this))
+    }, this._onFolderSelect.bind(this))
   }
 
   render() {

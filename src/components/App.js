@@ -2,18 +2,18 @@ import React, { Component } from 'react'
 import Results from './Results'
 import StepOne from './StepOne'
 import StepTwo from './StepTwo'
-import { isElectron } from '../utils/utils'
 import logo from '../logo.svg'
 import './App.css'
 
 const INITIAL_STATE = {
   symbolName: '',
-  directoryPath: '',
-  loadingDirectory: false,
-  searching: false,
-  checkCount: 0,
-  sketchFiles: [],
-  matchedFiles: []
+  results: {
+    path: '',
+    symbolName: '',
+    sketchFiles: [],
+    searchedFiles: [],
+    errors: []
+  }
 }
 
 class App extends Component {
@@ -23,46 +23,37 @@ class App extends Component {
     this.state = INITIAL_STATE
   }
 
-  hasSearched() {
-    return (this.state.searching || this.state.sketchFiles.length)
+  _getNumSketchFiles() {
+    return this.state.results.sketchFiles.length
   }
 
-  onSymbolName(symbolName) {
+  _getCheckedCount() {
+    return this.state.results.searchedFiles.length + this.state.results.errors.length
+  }
+
+  _getMatchedFiles() {
+    let matches = []
+
+    for(let file of this.state.results.searchedFiles) {
+      if (file.matched) {
+        matches.push(file.path)
+      }
+    }
+
+    return matches
+  }
+
+  setSymbolName(symbolName) {
     this.setState({ symbolName })
   }
 
-  updateDirectoryPath(directoryPath) {
+  setResults(results) {
+    // Add logic to check for files & hide loading spinner
     // Set directory path and show loading spinner while we read the dir
-    this.setState({ directoryPath, loadingDirectory: true })
-  }
-
-  updateSketchFiles(sketchFiles) {
-    // Set sketch files & hide loading spinner
-    this.setState({ sketchFiles, loadingDirectory: false })
+    this.setState({ results })
 
     // TODO: Once we have a list of sketch files, resize window to display
     // https://discuss.atom.io/t/how-to-re-size-electron-main-window-dynamically/48183
-  }
-
-  onFileRead(file, detected) {
-    const checkCount = this.state.checkCount + 1
-    let searching = this.state.searching
-
-    // Last file has been read
-    if (checkCount === this.state.sketchFiles.length - 1) {
-      searching = false
-    }
-
-    if (detected) {
-      this.setState({
-        checkCount,
-        searching,
-        matchedFiles: this.state.matchedFiles.concat(file)
-      })
-    }
-    else {
-      this.setState({ checkCount, searching })
-    }
   }
 
   // TODO: Make this stop parsing sketch files
@@ -71,14 +62,8 @@ class App extends Component {
   }
 
   render() {
-    if (!isElectron()) {
-      return (
-        <div>Only the electron browser is supported</div>
-      )
-    }
-
-    const showStepOne = (!this.hasSearched() && !this.state.symbolName)
-    const showStepTwo = (!this.hasSearched() && this.state.symbolName)
+    const showStepOne = (!this._getCheckedCount() && !this.state.symbolName)
+    const showStepTwo = (!this._getCheckedCount() && this.state.symbolName)
 
     return (
       <div className="symbolocator">
@@ -87,24 +72,22 @@ class App extends Component {
           <h1 className="title">Symbolocator</h1>
         </header>
         <StepOne
-          onSymbolName={this.onSymbolName.bind(this)}
+          setSymbolName={this.setSymbolName.bind(this)}
           visible={showStepOne}
         />
         <StepTwo
           symbolName={this.state.symbolName}
-          updateDirectoryPath={this.updateDirectoryPath.bind(this)}
-          updateSketchFiles={this.updateSketchFiles.bind(this)}
-          onFileRead={this.onFileRead.bind(this)}
+          setResults={this.setResults.bind(this)}
           visible={showStepTwo}
         />
         <Results
-          directoryPath={this.state.directoryPath}
-          sketchFiles={this.state.sketchFiles}
-          matches={this.state.matchedFiles}
-          checkCount={this.state.checkCount}
           symbolName={this.state.symbolName}
+          directoryPath={this.state.results.path}
+          sketchFiles={this.state.results.sketchFiles}
+          matches={this._getMatchedFiles()}
+          checkCount={this._getCheckedCount()}
           restart={this.restart.bind(this)}
-          visible={this.hasSearched()}
+          visible={this._getCheckedCount()}
         />
       </div>
     );

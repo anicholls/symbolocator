@@ -6,7 +6,7 @@ export default class StepOne extends React.Component {
 
     const input = e.target.elements[0]
 
-    this.props.onSymbolName(input.value)
+    this.props.setSymbolName(input.value)
   }
 
   render() {
