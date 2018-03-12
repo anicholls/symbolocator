@@ -33,7 +33,7 @@
   font-size: large;
 }
 
-input,
+input[type="text"],
 button {
   background: #fff;
   height: 40px;
@@ -83,6 +83,16 @@ button {
   z-index: -1;
   background: #fff;
   margin: 3px;
+}
+
+.deep-search-toggle {
+  display: block;
+  margin-top: 32px;
+}
+.deep-search-toggle input {
+  position: relative;
+  top: -2px;
+  margin: 8px;
 }
 
 .progress-bar {

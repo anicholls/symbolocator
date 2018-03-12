@@ -5,8 +5,10 @@ export default class StepOne extends React.Component {
     e.preventDefault()
 
     const input = e.target.elements[0]
+    const deep = e.target.elements[2].checked
 
     this.props.setSymbolName(input.value)
+    this.props.setDeepSearch(deep)
   }
 
   render() {
@@ -22,6 +24,10 @@ export default class StepOne extends React.Component {
         <form onSubmit={this.onSubmit.bind(this)}>
           <input type="text" placeholder="Enter a symbol name" />
           <button type="submit" className="submit-btn">Next</button>
+          <label className="deep-search-toggle">
+            <input type="checkbox" id="deep-search" />
+            Deep Search
+          </label>
         </form>
       </div>
     )

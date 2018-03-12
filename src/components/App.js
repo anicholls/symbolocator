@@ -7,6 +7,7 @@ import './App.css'
 
 const INITIAL_STATE = {
   symbolName: '',
+  deep: false,
   results: {
     path: '',
     symbolName: '',
@@ -47,6 +48,10 @@ class App extends Component {
     this.setState({ symbolName })
   }
 
+  setDeepSearch(deep) {
+    this.setState({ deep })
+  }
+
   setResults(results) {
     // Add logic to check for files & hide loading spinner
     // Set directory path and show loading spinner while we read the dir
@@ -73,10 +78,12 @@ class App extends Component {
         </header>
         <StepOne
           setSymbolName={this.setSymbolName.bind(this)}
+          setDeepSearch={this.setDeepSearch.bind(this)}
           visible={showStepOne}
         />
         <StepTwo
           symbolName={this.state.symbolName}
+          deep={this.state.deep}
           setResults={this.setResults.bind(this)}
           visible={showStepTwo}
         />

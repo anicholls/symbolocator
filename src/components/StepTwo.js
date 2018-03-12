@@ -16,7 +16,7 @@ export default class StepTwo extends React.Component {
     // Electron only returns the path of the directory
     const dir = paths[0]
 
-    detectSymbolInPath(dir, this.props.symbolName, this.props.updateResults)
+    detectSymbolInPath(dir, this.props.symbolName, this.props.deep, this.props.updateResults)
       .then(result => {
         this.props.setResults(result)
       })
