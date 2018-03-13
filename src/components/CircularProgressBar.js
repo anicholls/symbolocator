@@ -3,6 +3,8 @@ import './CircularProgressBar.css'
 
 export default class CircularProgressBar extends React.Component {
   render() {
+    const percentage = this.props.percentage * 100
+
     // Size of the enclosing square
     const sqSize = this.props.sqSize
     // SVG centers the stroke width on the radius, subtract out so circle fits in square
@@ -12,7 +14,7 @@ export default class CircularProgressBar extends React.Component {
     // Arc length at 100% coverage is the circle circumference
     const dashArray = radius * Math.PI * 2
     // Scale 100% coverage overlay with the actual percent
-    const dashOffset = dashArray - dashArray * this.props.percentage / 100
+    const dashOffset = dashArray - dashArray * percentage / 100
 
     return (
       <div className="circular-progress-bar">
@@ -47,7 +49,7 @@ export default class CircularProgressBar extends React.Component {
             stroke="url(#gradient)" />
         </svg>
         <div className="progress-info">
-          <div className="percentage">{this.props.percentage}%</div>
+          <div className="percentage">{parseInt(percentage, 10)}%</div>
           <div className="subtext">{this.props.subtext}</div>
         </div>
       </div>

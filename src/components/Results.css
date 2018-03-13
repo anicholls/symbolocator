@@ -1,11 +1,19 @@
+.results {
+  margin-top: 72px;
+  width: 100vw;
+  overflow-x: hidden;
+}
+.result-tabs {
+  padding: 12px 64px 0;
+}
+
 .result-tab-bar {
   list-style: none;
-  padding: 12px 32px 0;
   margin: 0;
+  padding: 0;
   display: flex;
   justify-content: space-around;
-  background-color: #222;
-  color: #fff;
+  border-bottom: 1px solid #ccc;
 }
 .result-tab-bar li {
   cursor: pointer;
@@ -13,7 +21,8 @@
   position: relative;
 }
 .results .result-tab-bar .matches:after,
-.results .result-tab-bar .progress:after {
+.results .result-tab-bar .errors:after,
+.results .result-tab-bar .all:after {
   content: '';
   height: 3px;
   width: 0;
@@ -26,7 +35,8 @@
   transform: translateX(-50%);
 }
 .results.matches .result-tab-bar .matches:after,
-.results.progress .result-tab-bar .progress:after {
+.results.errors .result-tab-bar .errors:after,
+.results.all .result-tab-bar .all:after {
   width: 100%;
   background-image: linear-gradient(
     to top right,
@@ -35,21 +45,61 @@
   );
 }
 .result-tab-panels {
-  width: 200vw;
+  width: 300vw;
   display: flex;
-  transition: transform 0.2s ease-out;
+  transition: transform 0.3s ease-out;
 }
-.results.matches .result-tab-panels {
-  transform: translateX(-50%);
+.results.errors .result-tab-panels {
+  transform: translateX(-33.3333%);
 }
-.result-tab-panels .progress,
-.result-tab-panels .matches {
+.results.all .result-tab-panels {
+  transform: translateX(-66.6666%);
+}
+.result-tab-panels .matches,
+.result-tab-panels .errors,
+.result-tab-panels .all {
   width: 100vw;
+  box-sizing: border-box;
+  padding: 0 64px;
 }
 .result-tab-panels .progress {
   padding-top: 48px;
 }
 
-.results .circular-progress-bar {
-  margin-bottom: 32px;
+.file-list {
+  text-align: left;
+}
+.file-list .file-list-header {
+  cursor: pointer;
+  margin: 0 0 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #ccc;
+}
+.file-list .file-list-header .collapse-toggle {
+  float: right;
+  font-size: 15px;
+  font-weight: 400;
+  color: #00A4FD;
+}
+.file-list ul {
+  list-style: none;
+  text-align: left;
+  padding: 0;
+  margin: 0;
+  font-size: 15px;
+}
+.file-list.collapsed ul {
+  display: none;
+}
+.file-list ul li {
+  border-bottom: 1px solid #ebebeb;
+  font-size: 13px;
+  line-height: 16px;
+  padding: 16px 0;
+}
+
+.file-list .empty-state {
+  text-align: center;
+  margin-top: 80px;
+  opacity: 0.3;
 }

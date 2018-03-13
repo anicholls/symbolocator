@@ -1,8 +1,5 @@
 import React from 'react'
 import FileList from './FileList'
-import MatchedFiles from './MatchedFiles'
-import ProgressBar from './ProgressBar'
-import SearchInfo from './SearchInfo'
 import './Results.css'
 
 export default class Results extends React.Component {
@@ -10,12 +7,12 @@ export default class Results extends React.Component {
     super(props)
 
     this.state = {
-      activeTab: 0  // TODO: Enum this
+      activeTab: 'matches'  // TODO: Enum this
     }
   }
 
-  setActiveTab(tabIndex) {
-    this.setState({ activeTab: tabIndex })
+  setActiveTab(tabSlug) {
+    this.setState({ activeTab: tabSlug })
   }
 
   render() {
@@ -23,36 +20,44 @@ export default class Results extends React.Component {
       return null
     }
 
-    const percentage = parseInt(
-      (this.props.checkCount / this.props.sketchFiles.length), 10)
-
     return (
-      <div className="results">
-        <ProgressBar percentage={percentage} />
-        <button onClick={this.props.restart}>Restart</button>
-        <SearchInfo
-          numSketchFiles={this.props.sketchFiles.length}
-          checkCount={this.props.checkCount}
-          directoryPath={this.props.directoryPath}
-          symbolName={this.props.symbolName}
-        />
-        <MatchedFiles
-          percentage={this.props.percentage}
-          directoryPath={this.props.directoryPath}
-          files={this.props.matches}
-        />
-        {/* <FileList
-          directoryPath={this.props.directoryPath}
-          files={this.props.errors}
-          header="Parse Errors"
-          collapsed={true}
-        /> */}
-        <FileList
-          directoryPath={this.props.directoryPath}
-          files={this.props.sketchFiles}
-          header="Sketch Files"
-          collapsed={true}
-        />
+      <div className={`results ${this.state.activeTab}`}>
+        <div className="result-tabs">
+          <ul className="result-tab-bar">
+            <li onClick={this.setActiveTab.bind(this, 'matches')} className="matches">
+              Matches ({this.props.matches.length})
+            </li>
+            <li onClick={this.setActiveTab.bind(this, 'errors')} className="errors">
+              Errors ({this.props.errors.length})
+            </li>
+            <li onClick={this.setActiveTab.bind(this, 'all')} className="all">
+              All Files ({this.props.sketchFiles.length})
+            </li>
+          </ul>
+        </div>
+        <div className="result-tab-panels">
+          <div className="matches">
+            <FileList
+              directoryPath={this.props.directoryPath}
+              files={this.props.matches}
+              emptyState="No Matched Files"
+            />
+          </div>
+          <div className="errors">
+            <FileList
+              directoryPath={this.props.directoryPath}
+              files={this.props.errors}
+              emptyState="No Parse Errors"
+            />
+          </div>
+          <div className="all">
+            <FileList
+              directoryPath={this.props.directoryPath}
+              files={this.props.sketchFiles}
+              emptyState="No sketch files in folder."
+            />
+          </div>
+        </div>
       </div>
     )
   }

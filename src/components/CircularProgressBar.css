@@ -25,9 +25,9 @@
 }
 
 .circular-progress-bar .percentage {
-  font-size: 42px;
+  font-size: 32px;
   font-weight: 600;
-  line-height: 48px;
+  line-height: 40px;
   background: linear-gradient(
     to top right,
     #EE6C01  0%,
@@ -38,4 +38,5 @@
 }
 .circular-progress-bar .subtext {
   color: #b1b1b1;
+  font-size: 14px;
 }

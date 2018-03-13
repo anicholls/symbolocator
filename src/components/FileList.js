@@ -5,7 +5,6 @@ export default class FileList extends React.Component {
     super(props)
 
     this.state = {
-      collapsed: this.props.collapsed,
       visible: this.props.visible || true
     }
   }
@@ -14,29 +13,53 @@ export default class FileList extends React.Component {
     this.setState({ collapsed: !this.state.collapsed })
   }
 
+  _renderFileList() {
+    return (
+      <ul>
+        { this.props.files.map((path, index) => {
+            const relPath = path.replace(this.props.directoryPath, '.')
+            const dir = relPath.substring(0, relPath.lastIndexOf("/"));
+            const filename = relPath.split('/').pop()
+            return (
+              <li key={index}>
+                {dir}/<strong>{ filename }</strong>
+              </li>
+            )
+        })}
+      </ul>
+    )
+  }
+
+  _renderEmptyState() {
+    if (!this.props.emptyState || this.props.files.length) {
+      return null
+    }
+
+    return (
+      <div className="empty-state">
+        <h3>{this.props.emptyState}</h3>
+      </div>
+    )
+  }
+
   render() {
     if (!this.state.visible) {
       return null
     }
 
-    const numFiles = Object.keys(this.props.files).length
-
-    const toggleIndicator = (this.state.collapsed) ? 'Expand' : 'Collapse'
+    // const numFiles = Object.keys(this.props.files).length
+    // const toggleIndicator = (this.state.collapsed) ? 'Expand' : 'Collapse'
 
     return (
       <div className={this.state.collapsed ? 'file-list collapsed' : 'file-list'}>
-        <h4 onClick={this.toggleCollapsed.bind(this)}>
+        {/*
+        <h4 className="file-list-header" onClick={this.toggleCollapsed.bind(this)}>
           {this.props.header} ({numFiles})
           <span className="collapse-toggle">{toggleIndicator}</span>
         </h4>
-        <ul>
-          { this.props.files.map((path, index) => {
-              const relPath = path.replace(this.props.directoryPath, '.')
-              return (
-                <li key={index}>{ relPath }</li>
-              )
-          })}
-        </ul>
+        */}
+        {this._renderFileList()}
+        {this._renderEmptyState()}
       </div>
     )
   }

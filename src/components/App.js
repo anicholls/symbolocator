@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
+import Header from './Header'
 import Results from './Results'
+import Loading from './Loading'
 import StepOne from './StepOne'
 import StepTwo from './StepTwo'
-import logo from '../logo.svg'
 import './App.css'
 
 
@@ -11,6 +12,7 @@ const {ipcRenderer} = window.require('electron')
 const INITIAL_STATE = {
   symbolName: '',
   deep: false,
+  loading: false,
   results: {
     path: '',
     symbolName: '',
@@ -29,7 +31,10 @@ class App extends Component {
 
   componentDidMount() {
     ipcRenderer.on('results', (event, results) => {
-      this.setState({ results })
+      this.setState({
+        results,
+        loading: false
+      })
     })
   }
 
@@ -67,6 +72,7 @@ class App extends Component {
       symbolName: this.state.symbolName,
       deep: this.state.deep
     })
+    this.setState({ loading: true })
   }
 
   // Add logic to check for files & hide loading spinner
@@ -81,16 +87,19 @@ class App extends Component {
   }
 
   render() {
-    const showStepOne = (!this._getCheckedCount() && !this.state.symbolName)
-    const showStepTwo = (!this._getCheckedCount() && this.state.symbolName)
+    const showStepOne = (!this._getCheckedCount() && !this.state.symbolName && !this.state.loading)
+    const showStepTwo = (!this._getCheckedCount() && this.state.symbolName && !this.state.loading)
+    const showSpinner = (this.state.loading)
 
     return (
       <div className="symbolocator">
-        <header className="header">
-          <img src={logo} className="logo" alt="logo" />
-          <h1 className="title">Symbolocator</h1>
-        </header>
-        <h1>{this._getCheckedCount()}</h1>
+        <Header
+          fileCount={this.state.results.sketchFiles.length}
+          checkCount={this._getCheckedCount()}
+          directoryPath={this.state.results.path}
+          symbolName={this.state.symbolName}
+          restart={this.restart.bind(this)}
+        />
         <StepOne
           setSymbolName={this.setSymbolName.bind(this)}
           setDeepSearch={this.setDeepSearch.bind(this)}
@@ -101,6 +110,9 @@ class App extends Component {
           deep={this.state.deep}
           setPath={this.setPath.bind(this)}
           visible={showStepTwo}
+        />
+        <Loading
+          visible={showSpinner}
         />
         <Results
           symbolName={this.state.symbolName}
