@@ -1,8 +1,6 @@
 const electron = require('electron')
 // Module to control application life.
-const app = electron.app
-// Module to create native browser window.
-const BrowserWindow = electron.BrowserWindow
+const { app, BrowserWindow, ipcMain } = electron
 
 const path = require('path')
 const url = require('url')
@@ -14,7 +12,7 @@ let mainWindow
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 800, height: 600})
-  
+
   // load the index.html of the app.
   const startUrl = process.env.ELECTRON_START_URL || url.format({
       pathname: path.join(__dirname, '/../build/index.html'),
@@ -60,3 +58,20 @@ app.on('activate', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+
+const fork = require('child_process').fork
+process.execArgv.push('--debug=' + (5858));
+const detectSymbolProcess = fork(path.join(__dirname, 'detectSymbolProcess.js'))
+
+app.on('ready', function() {
+
+  // When we get a search request, start searching
+  ipcMain.on('search', (event, args) => {
+    detectSymbolProcess.on('message', results => {
+      mainWindow.webContents.send('results', results)
+    })
+
+    detectSymbolProcess.send([args.path, args.symbolName, args.deep])
+  })
+})

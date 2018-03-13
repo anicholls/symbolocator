@@ -5,6 +5,9 @@ import StepTwo from './StepTwo'
 import logo from '../logo.svg'
 import './App.css'
 
+
+const {ipcRenderer} = window.require('electron')
+
 const INITIAL_STATE = {
   symbolName: '',
   deep: false,
@@ -22,6 +25,12 @@ class App extends Component {
     super(props)
 
     this.state = INITIAL_STATE
+  }
+
+  componentDidMount() {
+    ipcRenderer.on('results', (event, results) => {
+      this.setState({ results })
+    })
   }
 
   _getNumSketchFiles() {
@@ -52,14 +61,19 @@ class App extends Component {
     this.setState({ deep })
   }
 
-  setResults(results) {
-    // Add logic to check for files & hide loading spinner
-    // Set directory path and show loading spinner while we read the dir
-    this.setState({ results })
-
-    // TODO: Once we have a list of sketch files, resize window to display
-    // https://discuss.atom.io/t/how-to-re-size-electron-main-window-dynamically/48183
+  setPath(path) {
+    ipcRenderer.send('search', {
+      path: path,
+      symbolName: this.state.symbolName,
+      deep: this.state.deep
+    })
   }
+
+  // Add logic to check for files & hide loading spinner
+  // Set directory path and show loading spinner while we read the dir
+
+  // TODO: Once we have a list of sketch files, resize window to display
+  // https://discuss.atom.io/t/how-to-re-size-electron-main-window-dynamically/48183
 
   // TODO: Make this stop parsing sketch files
   restart() {
@@ -76,6 +90,7 @@ class App extends Component {
           <img src={logo} className="logo" alt="logo" />
           <h1 className="title">Symbolocator</h1>
         </header>
+        <h1>{this._getCheckedCount()}</h1>
         <StepOne
           setSymbolName={this.setSymbolName.bind(this)}
           setDeepSearch={this.setDeepSearch.bind(this)}
@@ -84,7 +99,7 @@ class App extends Component {
         <StepTwo
           symbolName={this.state.symbolName}
           deep={this.state.deep}
-          setResults={this.setResults.bind(this)}
+          setPath={this.setPath.bind(this)}
           visible={showStepTwo}
         />
         <Results
