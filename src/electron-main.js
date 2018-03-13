@@ -61,7 +61,6 @@ app.on('activate', function () {
 
 
 const fork = require('child_process').fork
-process.execArgv.push('--debug=' + (5858));
 const detectSymbolProcess = fork(path.join(__dirname, 'detectSymbolProcess.js'))
 
 app.on('ready', function() {
