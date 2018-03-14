@@ -1,7 +1,7 @@
 const electron = require('electron')
 // Module to control application life.
 const { app, BrowserWindow, ipcMain } = electron
-
+const detectSymbolInPath = require('symbolocator-cli')
 const path = require('path')
 const url = require('url')
 
@@ -64,13 +64,10 @@ const fork = require('child_process').fork
 const detectSymbolProcess = fork(path.join(__dirname, 'detectSymbolProcess.js'))
 
 app.on('ready', function() {
+  const progressCb = results =>
+    mainWindow.webContents.send('results', results)
 
   // When we get a search request, start searching
-  ipcMain.on('search', (event, args) => {
-    detectSymbolProcess.on('message', results => {
-      mainWindow.webContents.send('results', results)
-    })
-
-    detectSymbolProcess.send([args.path, args.symbolName, args.deep])
-  })
+  ipcMain.on('search', (event, args) =>
+    detectSymbolInPath(args.path, args.symbolName, args.deep, progressCb))
 })
